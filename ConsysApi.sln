@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34408.163
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsysApi", "ConsysApi\ConsysApi.csproj", "{A13BD068-4AAF-497C-A0B7-01A26E4A3105}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsysApi.Data", "ConsysApi.Data\ConsysApi.Data.csproj", "{FB2921BB-0C56-456C-8C6B-7904415A4B67}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A13BD068-4AAF-497C-A0B7-01A26E4A3105}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A13BD068-4AAF-497C-A0B7-01A26E4A3105}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A13BD068-4AAF-497C-A0B7-01A26E4A3105}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A13BD068-4AAF-497C-A0B7-01A26E4A3105}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB2921BB-0C56-456C-8C6B-7904415A4B67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB2921BB-0C56-456C-8C6B-7904415A4B67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB2921BB-0C56-456C-8C6B-7904415A4B67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB2921BB-0C56-456C-8C6B-7904415A4B67}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B1A5F79-8177-40F3-8255-7556D10BF9BD}
+	EndGlobalSection
+EndGlobal
