@@ -1,4 +1,6 @@
 ﻿using ConsysApi.Data.Context;
+using ConsysApi.Interfaces;
+using ConsysApi.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,10 +13,8 @@ namespace ConsysApi.ExtensionMethods
         {
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<ConsysContext>(options => 
-            {
-                options.UseNpgsql(connectionString);
-            });
+            builder.Services.AddDbContext<ConsysContext>();
+            builder.Services.AddScoped<IProdutoRepository<ConsysContext>, ProdutosRepository<ConsysContext>>();
         }
     }
 }

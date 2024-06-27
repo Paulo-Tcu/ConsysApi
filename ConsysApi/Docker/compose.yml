@@ -1,0 +1,12 @@
+﻿version: '3.8'
+
+services:
+  db:
+    image: consys_postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: consys_database
+      POSTGRES_USER: consys
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - "5432:5432"

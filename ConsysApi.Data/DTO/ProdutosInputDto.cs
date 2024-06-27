@@ -13,11 +13,11 @@ namespace ConsysApi.Data.DTO
         public string Descricao { get; private set; }
 
         [Required(ErrorMessage = "Valor em R$ do Produto é obrigatório")]
+        [Range(0.00, double.MaxValue)]
         public decimal Valor { get; private set; }
 
         [Required(ErrorMessage = "Quantidade do Produto é obrigatório")]
-        [MinLength(0)]
-        [MaxLength(int.MaxValue)]
+        [Range(0, int.MaxValue)]
         public int Quantidade { get; private set; }
 
         public ProdutosInputDto(string nome, string descricao, decimal valor, int quantidade)

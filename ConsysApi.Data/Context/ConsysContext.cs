@@ -1,7 +1,6 @@
 ﻿using ConsysApi.Data.Mappings;
 using ConsysApi.Data.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 
 namespace ConsysApi.Data.Context
@@ -18,6 +17,11 @@ namespace ConsysApi.Data.Context
         {
             modelBuilder.ApplyConfiguration(new ProdutoMap());
             modelBuilder.ApplyConfiguration(new UsuariosMap());
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("User ID=consys;Password=12345678;Host=192.168.3.130;Port=5432;Database=consys_database;Pooling=true;");
         }
 
         protected virtual void OnDisposed(EventArgs e)

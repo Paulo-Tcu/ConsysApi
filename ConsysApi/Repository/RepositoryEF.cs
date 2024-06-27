@@ -1,8 +1,6 @@
 ﻿using ConsysApi.Data.Context;
-using ConsysApi.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Linq.Expressions;
 
@@ -133,67 +131,6 @@ namespace ConsysApi.Repository
             }
         }
 
-        //public virtual void UpdateEntity<TEntity>(TEntity entity, Expression<Func<TEntity, object>> propertyExpression)
-        //    where TEntity : class
-        //{
-        //    var memberInit = propertyExpression.Body as MemberInitExpression;
-        //    if (memberInit == null)
-        //        throw new ArgumentException(
-        //            "A expressão Lambda deve ser utilizada a partir de um objeto já instanciado.",
-        //            nameof(propertyExpression));
-
-        //    var propertysEntity = entity.GetType().GetProperties();
-        //    var values = memberInit.Bindings
-        //        .Select(binding => (binding as MemberAssignment))
-        //        .SelectMany(memberAssignment => new Dictionary<string, object>
-        //        {
-        //            {
-        //                memberAssignment.Member.Name,
-        //                Expression.Lambda(memberAssignment.Expression)
-        //                .Compile()
-        //                .DynamicInvoke()
-        //            }
-        //        });
-
-        //    foreach (var item in values)
-        //    {
-        //        var propEntity = propertysEntity.FirstOrDefault(w => w.Name == item.Key);
-
-        //        if (propEntity != null)
-        //        {
-        //            propEntity.SetValue(entity, item.Value);
-        //            Context.Entry(entity).Property(propEntity.Name).IsModified = true;
-        //        }
-        //    }
-        //}
-
-        //public DataTable ConvertToDataTable<T>(IEnumerable<T> collection)
-        //{
-        //    var dataTable = new DataTable();
-        //    var properties = typeof(T).GetProperties();
-
-        //    foreach (var property in properties)
-        //    {
-        //        Type columnType = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
-        //        dataTable.Columns.Add(property.Name, columnType);
-        //    }
-
-        //    foreach (T obj in collection)
-        //    {
-        //        var values = properties.Select(p =>
-        //        {
-        //            if (p.GetValue(obj) == null)
-        //                return DBNull.Value;
-
-        //            if (p.PropertyType == typeof(Guid))
-        //                return ((Guid)p.GetValue(obj)).ToString();
-        //            return p.GetValue(obj);
-        //        }).ToArray();
-        //        dataTable.Rows.Add(values);
-        //    }
-        //    return dataTable;
-        //}
-
         protected virtual IEnumerable<string> GetPropertiesOnModified(PropertyValues originalValues, PropertyValues currentValues)
         {
             //Captura as propriedades de cada entidade
@@ -201,8 +138,8 @@ namespace ConsysApi.Repository
 
             foreach (var property in properties)
             {
-                var valueNew = currentValues[property];
-                var valueOld = originalValues[property];
+                dynamic valueNew = currentValues[property];
+                dynamic valueOld = originalValues[property];
 
                 // Verifica se os tipos são compatíveis antes de comparar
                 if ((valueNew?.GetType() == valueOld?.GetType()) || (valueNew == null && valueOld != null) || (valueNew != null && valueOld == null))

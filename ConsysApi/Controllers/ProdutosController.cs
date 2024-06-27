@@ -1,10 +1,9 @@
 ﻿using ConsysApi.Data.Context;
 using ConsysApi.Data.DTO;
-using ConsysApi.Data.Interfaces;
 using ConsysApi.Data.Model;
+using ConsysApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace ConsysApi.Controllers
 {
@@ -14,47 +13,91 @@ namespace ConsysApi.Controllers
     {
         private readonly ConsysContext _consysContext;
 
-        private readonly IRepositoryEF<ConsysContext> _repository;
+        private readonly IProdutoRepository<ConsysContext> _repository;
 
-        public ProdutosController(IRepositoryEF<ConsysContext> repositoryContext)
+        public ProdutosController(IProdutoRepository<ConsysContext> repositoryContext)
         {
             _repository = repositoryContext;
-            _consysContext = repositoryContext.Context;
+            _consysContext = _repository.Context;
         }
 
-        [HttpGet("/produtos")]
-        public async Task<IEnumerable<Produtos>> Get()
+        [HttpGet("produtos-convertidos")]
+        public async Task<IEnumerable<ProdutoOutputDto>> AllProdutosConvertidos()
         {
-            var produtos = await _consysContext.Produtos
-                .AsNoTracking()
-                .ToListAsync();
-
-            return produtos;
+            return await _repository.GetAllProdutos();
         }
 
-        [HttpGet("/{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("produtos")]
+        public IEnumerable<Produtos> AllProdutos()
         {
-            var produto = await _consysContext.Produtos.FirstOrDefaultAsync(f => f.Id == id);
-
-            return produto == null
-                ? NotFound()
-                : Ok(); 
+            return _consysContext.Produtos.AsNoTracking();
         }
 
-        [HttpPost("/create")]
-        public async Task<IActionResult> Post([FromBody] ProdutosInputDto inputDto)
+        [HttpGet("produto-convertido/{id:int}")]
+        public async Task<IActionResult> GetProduto(int id)
         {
+            var produto = await _repository.GetProduto(id);
+
+            return produto == null ? NotFound() : Ok(produto);
         }
 
-        [HttpPut("/update")]
-        public async Task<IActionResult> Put([FromBody] string value)
+        [HttpPost("create")]
+        public async Task<IActionResult> Post([FromBody] ProdutosInputDto produto)
         {
+            try
+            {
+                if(!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var produtoEntity = _repository.CreateProduto(produto);
+                await _repository.CommitAsync();
+
+                return new CreatedAtRouteResult("GetProduto", produtoEntity);
+            }
+            catch (Exception ex) 
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
-        [HttpDelete("/delete/id/{id:int}")]
+        [HttpPut("update/id/{id:int}")]
+        public async Task<IActionResult> Put(int id, [FromBody] ProdutosInputDto produtoDto)
+        {
+            try
+            {
+                _repository.UpdateProduto(id, produtoDto);
+                await _repository.CommitAsync();
+
+                return Ok();
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpDelete("delete/id/{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                _repository.RemoveProduto(id);
+                await _repository.CommitAsync();
+
+                return Ok();
+            }
+            catch(ArgumentNullException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
     }
 }

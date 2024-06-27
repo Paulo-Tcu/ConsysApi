@@ -24,4 +24,8 @@
     <ProjectReference Include="..\ConsysApi.Data\ConsysApi.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="..\.dockerignore" Link="Docker\.dockerignore" />
+  </ItemGroup>
+
 </Project>
