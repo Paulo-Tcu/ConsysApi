@@ -15,16 +15,16 @@ namespace ConsysApi.Data.Migrations
                 name: "PRODUTOS",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    ID = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     NOME = table.Column<string>(type: "VARCHAR", maxLength: 250, nullable: false),
-                    DESCRICAO = table.Column<string>(type: "VARCHAR", maxLength: 500, nullable: false),
+                    DESCRICAO = table.Column<string>(type: "VARCHAR", maxLength: 500, nullable: true),
                     VALOR = table.Column<decimal>(type: "numeric(14,6)", nullable: false),
                     QUANTIDADE = table.Column<int>(type: "INT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PRODUTOS", x => x.Id);
+                    table.PrimaryKey("PK_PRODUTOS", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -47,19 +47,13 @@ namespace ConsysApi.Data.Migrations
                 column: "NOME");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PK_ID",
-                table: "PRODUTOS",
-                column: "Id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_NOME_ID",
                 table: "USUARIOS",
                 column: "NOME_ID",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PK_ID1",
+                name: "IX_PK_ID",
                 table: "USUARIOS",
                 column: "Id",
                 unique: true);

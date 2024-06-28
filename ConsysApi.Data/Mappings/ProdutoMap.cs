@@ -13,10 +13,8 @@ namespace ConsysApi.Data.Mappings
 
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()
+                .HasColumnName("ID")
                 .UseIdentityColumn();
-
-            builder.HasIndex(x => x.Id, "IX_PK_ID")
-                .IsUnique();
 
             builder.Property(x => x.Nome)
                 .IsRequired()
@@ -27,6 +25,7 @@ namespace ConsysApi.Data.Mappings
             builder.HasIndex(x => x.Nome, "IX_NOME_PRODUTO");
 
             builder.Property(x => x.Descricao)
+                .IsRequired(false)
                 .HasColumnName("DESCRICAO")
                 .HasColumnType("VARCHAR")
                 .HasMaxLength(500)

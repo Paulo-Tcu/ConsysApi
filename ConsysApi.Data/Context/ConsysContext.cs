@@ -21,7 +21,7 @@ namespace ConsysApi.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("User ID=consys;Password=12345678;Host=192.168.3.130;Port=5432;Database=consys_database;Pooling=true;");
+            optionsBuilder.UseNpgsql("User ID=consys;Password=12345678;Host=20.201.81.232;Port=5432;Database=consys_database;Pooling=true;");
         }
 
         protected virtual void OnDisposed(EventArgs e)

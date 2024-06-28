@@ -21,7 +21,7 @@ namespace ConsysApi.Data.Mappings
             builder.Property(x => x.NomeId)
                 .IsRequired()
                 .HasColumnName("NOME_ID")
-                .HasColumnType("VARCHAR")
+                .HasColumnType("VARCHAR(25)")
                 .HasMaxLength(25);
 
             builder.HasIndex(x => x.NomeId, "IX_NOME_ID")
@@ -30,8 +30,14 @@ namespace ConsysApi.Data.Mappings
             builder.Property(x => x.Crud)
                 .IsRequired()
                 .HasColumnName("CRUD")
-                .HasColumnType("VARCHAR")
+                .HasColumnType("VARCHAR(7)")
                 .HasMaxLength(7);
+
+            builder.Property(x => x.Senha)
+                .IsRequired()
+                .HasColumnName("SENHA")
+                .HasColumnType("VARCHAR(500)")
+                .HasMaxLength(500);
         }
     }
 }

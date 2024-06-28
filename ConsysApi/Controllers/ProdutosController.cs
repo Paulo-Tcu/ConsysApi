@@ -1,7 +1,8 @@
 ﻿using ConsysApi.Data.Context;
 using ConsysApi.Data.DTO;
-using ConsysApi.Data.Model;
+using ConsysApi.Helpers;
 using ConsysApi.Interfaces;
+using ConsysApi.Services.Attribute;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace ConsysApi.Controllers
 {
     [Route("v1/produto")]
     [ApiController]
+    [AuthorizeCustom(ClaimType = "CRUD", ClaimValue = "R")]
     public class ProdutosController : ControllerBase
     {
         private readonly ConsysContext _consysContext;
@@ -22,15 +24,17 @@ namespace ConsysApi.Controllers
         }
 
         [HttpGet("produtos-convertidos")]
-        public async Task<IEnumerable<ProdutoOutputDto>> AllProdutosConvertidos()
+        public async Task<IActionResult> AllProdutosConvertidos()
         {
-            return await _repository.GetAllProdutos();
+            var produtos = await _repository.GetAllProdutos();
+            return Ok(new ApiResult(produtos));
         }
 
         [HttpGet("produtos")]
-        public IEnumerable<Produtos> AllProdutos()
+        public IActionResult AllProdutos()
         {
-            return _consysContext.Produtos.AsNoTracking();
+            var produtos = _consysContext.Produtos.AsNoTracking();
+            return Ok(new ApiResult(produtos));
         }
 
         [HttpGet("produto-convertido/{id:int}")]
@@ -38,10 +42,13 @@ namespace ConsysApi.Controllers
         {
             var produto = await _repository.GetProduto(id);
 
-            return produto == null ? NotFound() : Ok(produto);
+            return produto == null 
+                ? NotFound(new ApiResult(false, "Produto não encontrado")) 
+                : Ok(new ApiResult(produto));
         }
 
         [HttpPost("create")]
+        [AuthorizeCustom(ClaimType = "CRUD", ClaimValue = "C")]
         public async Task<IActionResult> Post([FromBody] ProdutosInputDto produto)
         {
             try
@@ -52,15 +59,16 @@ namespace ConsysApi.Controllers
                 var produtoEntity = _repository.CreateProduto(produto);
                 await _repository.CommitAsync();
 
-                return new CreatedAtRouteResult("GetProduto", produtoEntity);
+                return StatusCode(201, new ApiResult(produtoEntity));
             }
             catch (Exception ex) 
             {
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, new ApiResult(false, ex.Message));
             }
         }
 
         [HttpPut("update/id/{id:int}")]
+        [AuthorizeCustom(ClaimType = "CRUD", ClaimValue = "U")]
         public async Task<IActionResult> Put(int id, [FromBody] ProdutosInputDto produtoDto)
         {
             try
@@ -68,35 +76,36 @@ namespace ConsysApi.Controllers
                 _repository.UpdateProduto(id, produtoDto);
                 await _repository.CommitAsync();
 
-                return Ok();
+                return Ok(new ApiResult(true, "Atualizado com sucesso"));
             }
             catch (ArgumentNullException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ApiResult(false, ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, new ApiResult(false, ex.Message));
             }
         }
 
         [HttpDelete("delete/id/{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        [AuthorizeCustom(ClaimType = "CRUD", ClaimValue = "D")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             try
             {
                 _repository.RemoveProduto(id);
                 await _repository.CommitAsync();
 
-                return Ok();
+                return Ok(new ApiResult(true, "Removido com sucesso."));
             }
             catch(ArgumentNullException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ApiResult(false, ex.Message));
             }
             catch(Exception ex)
             {
-                return StatusCode(500, new { ex.Message });
+                return StatusCode(500, new ApiResult(false, ex.Message));
             }
         }
     }

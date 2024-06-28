@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ConsysApi.Data.Migrations
 {
     [DbContext(typeof(ConsysContext))]
-    [Migration("20240627154725_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240628053829_UpdateUsuarios")]
+    partial class UpdateUsuarios
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,12 +28,12 @@ namespace ConsysApi.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("ID");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descricao")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("VARCHAR")
                         .HasColumnName("DESCRICAO");
@@ -56,9 +56,6 @@ namespace ConsysApi.Data.Migrations
 
                     b.HasIndex(new[] { "Nome" }, "IX_NOME_PRODUTO");
 
-                    b.HasIndex(new[] { "Id" }, "IX_PK_ID")
-                        .IsUnique();
-
                     b.ToTable("PRODUTOS", (string)null);
                 });
 
@@ -73,14 +70,20 @@ namespace ConsysApi.Data.Migrations
                     b.Property<string>("Crud")
                         .IsRequired()
                         .HasMaxLength(7)
-                        .HasColumnType("VARCHAR")
+                        .HasColumnType("VARCHAR(7)")
                         .HasColumnName("CRUD");
 
                     b.Property<string>("NomeId")
                         .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("VARCHAR")
+                        .HasColumnType("VARCHAR(25)")
                         .HasColumnName("NOME_ID");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("VARCHAR(500)")
+                        .HasColumnName("SENHA");
 
                     b.HasKey("Id");
 
@@ -88,8 +91,7 @@ namespace ConsysApi.Data.Migrations
                         .IsUnique();
 
                     b.HasIndex(new[] { "Id" }, "IX_PK_ID")
-                        .IsUnique()
-                        .HasDatabaseName("IX_PK_ID1");
+                        .IsUnique();
 
                     b.ToTable("USUARIOS", (string)null);
                 });
