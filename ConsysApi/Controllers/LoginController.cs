@@ -32,7 +32,7 @@ namespace ConsysApi.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpPost]
+        [HttpPost("")]
         public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
             if(!ModelState.IsValid)
@@ -50,6 +50,19 @@ namespace ConsysApi.Controllers
             var token = _tokenService.GenereteToken(userBase);
 
             return Ok(new ApiResult(token));
+        }
+
+
+        [HttpPost("senha-hash")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        public IActionResult GetSenhaHash(string senha)
+        {
+            if (string.IsNullOrEmpty(senha))
+                return BadRequest(new ApiResult(false, "Valor deve ser uma string não vazia ou nula"));
+
+            var senhaHash = PasswordHasher.Hash(senha);
+
+            return Ok(new ApiResult(true, senhaHash, "resultado da palavra para inserção no BD"));
         }
     }
 }

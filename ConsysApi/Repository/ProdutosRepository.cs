@@ -78,7 +78,7 @@ namespace ConsysApi.Repository
             var produtoBase = Context.Produtos.FirstOrDefault(prod => prod.Id == id);
 
             if (produtoBase == null)
-                new ArgumentNullException(nameof(produtoBase), "Produto não localizado");
+                throw new ArgumentNullException(nameof(produtoBase), "Produto não localizado");
 
             UpdateEntity(produtoBase, (entityBase) => 
             {
@@ -94,7 +94,7 @@ namespace ConsysApi.Repository
             var produto = Context.Produtos.FirstOrDefault(prod => prod.Id == id);
 
             if (produto == null)
-                new ArgumentNullException(nameof(produto), "Produto não localizado");
+                throw new ArgumentNullException(nameof(produto), "Produto não localizado");
 
             base.DeleteEntity(produto);
         }

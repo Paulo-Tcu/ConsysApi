@@ -8,7 +8,7 @@ namespace ConsysApi.Data.DTO
         [MaxLength(250)]
         public string Nome { get; private set; }
 
-        [Required(ErrorMessage = "Descrição do Produto é obrigatório")]
+        //[Required(ErrorMessage = "Descrição do Produto é obrigatório")]
         [MaxLength(500)]
         public string Descricao { get; private set; }
 
